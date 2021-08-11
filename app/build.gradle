@@ -16,7 +16,7 @@ apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 android {
 
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.tommasoberlose.anotherwidget"
@@ -31,20 +31,29 @@ android {
         renderscriptSupportModeEnabled true
     }
 
+    signingConfigs {
+        config {
+            storeFile file('../anotherwidget.jks')
+            storePassword 'anotherwidget'
+            keyAlias 'anotherwidget'
+            keyPassword 'anotherwidget'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
     kotlinOptions {
@@ -57,13 +66,28 @@ android {
 
     buildFeatures {
         dataBinding = true
-        viewBinding = true
+        viewBinding true
+    }
+
+    tasks.whenTaskAdded { task ->
+        if (task.name.startsWith("lint")) {
+            if (task.name.toLowerCase().endsWith("release")) {
+                task.doFirst {
+                    android.lintOptions.abortOnError = false
+                }
+            }
+            //else {
+            //    task.doFirst {
+            //        android.lintOptions.abortOnError = true
+            //    }
+            //}
+        }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
