@@ -13,7 +13,7 @@ class CrashlyticsReceiver : BroadcastReceiver() {
         if (intent.action == Actions.ACTION_REPORT_CRASH) {
             val exception: Exception = intent.getSerializableExtra(EXCEPTION) as Exception
             FirebaseCrashlytics.getInstance().recordException(exception)
-            FirebaseCrashlytics.getInstance().sendUnsentReports()
+            //FirebaseCrashlytics.getInstance().sendUnsentReports()
         }
     }
 
