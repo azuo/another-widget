@@ -19,7 +19,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.tommasoberlose.anotherwidget"
+        applicationId "com.tommasoberlose.anotherwidget.azuo"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 139

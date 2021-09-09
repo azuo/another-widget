@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "791844924473",
+    "firebase_url": "https://anotherwidget-182008.firebaseio.com",
+    "project_id": "anotherwidget-182008",
+    "storage_bucket": "anotherwidget-182008.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791844924473:android:0ad4f6e3890f1ad320b1e8",
+        "android_client_info": {
+          "package_name": "com.tommasoberlose.anotherwidget.azuo"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT_v2Qw1zCWfmc_ywsovj_4poSXr7k5f0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
