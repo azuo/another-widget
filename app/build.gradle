@@ -23,9 +23,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 139
-        versionName "2.3.3"
+        versionName "2.3.3 P2"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
 
         renderscriptSupportModeEnabled true
@@ -42,8 +41,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics.mappingFileUploadEnabled false
             signingConfig signingConfigs.config
         }
         debug {
@@ -89,9 +90,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // UI
     implementation 'androidx.appcompat:appcompat:1.2.0'
