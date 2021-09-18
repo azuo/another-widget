@@ -64,7 +64,7 @@ class EventRepository(val context: Context) {
                 else -> add(Calendar.HOUR, 6)
             }
         }
-        val event = if (nextEvent != null && nextEvent.endDate > now && nextEvent.startDate < limit.timeInMillis) {
+        val event = if (nextEvent != null && nextEvent.endDate > now && nextEvent.startDate <= limit.timeInMillis) {
             nextEvent
         } else {
             val events = getEvents()
@@ -105,8 +105,10 @@ class EventRepository(val context: Context) {
         } else {
             resetNextEventData()
         }
-        UpdatesReceiver.setUpdates(context)
         MainWidget.updateWidget(context)
+        org.greenrobot.eventbus.EventBus.getDefault().post(
+            com.tommasoberlose.anotherwidget.ui.fragments.MainFragment.UpdateUiMessageEvent()
+        )
     }
 
     fun goToPreviousEvent() {
@@ -121,8 +123,10 @@ class EventRepository(val context: Context) {
         } else {
             resetNextEventData()
         }
-        UpdatesReceiver.setUpdates(context)
         MainWidget.updateWidget(context)
+        org.greenrobot.eventbus.EventBus.getDefault().post(
+            com.tommasoberlose.anotherwidget.ui.fragments.MainFragment.UpdateUiMessageEvent()
+        )
     }
 
     fun getFutureEvents(): List<Event> {

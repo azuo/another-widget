@@ -153,13 +153,17 @@ class MainFragment : Fragment() {
             WidgetHelper.runWithCustomTypeface(requireContext()) { typeface ->
                 uiJob?.cancel()
                 uiJob = lifecycleScope.launch(Dispatchers.IO) {
-                    val generatedView = MainWidget.getWidgetView(requireContext(), binding.widget.width, typeface)
+                    val generatedView = MainWidget.getWidgetView(
+                        requireContext(),
+                        binding.widget.width - binding.widget.paddingStart - binding.widget.paddingEnd,
+                        typeface
+                    )
 
                     if (generatedView != null) {
-                        val view: View = generatedView.apply(requireActivity().applicationContext, binding.widget)
-                        view.measure(0, 0)
-
                         withContext(Dispatchers.Main) {
+                            val view: View = generatedView.apply(requireActivity().applicationContext, binding.widget)
+                            view.measure(0, 0)
+
                             binding.widgetLoader.animate().scaleX(1f).scaleY(1f).alpha(1f)
                                 .setDuration(200L).start()
                             binding.widget.animate().alpha(0f).setDuration(200L).withEndAction {
