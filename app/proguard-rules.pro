@@ -49,3 +49,6 @@
 -keepclassmembers class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+
+# https://github.com/square/okhttp/blob/master/okhttp/src/main/resources/META-INF/proguard/okhttp3.pro
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
