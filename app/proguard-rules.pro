@@ -28,6 +28,12 @@
     public static void check*NotNull*(java.lang.Object, java.lang.String, java.lang.String);
 }
 
+-assumenosideeffects class java.util.Objects {
+    public static java.lang.Object requireNonNull(java.lang.Object);
+    public static java.lang.Object requireNonNull(java.lang.Object, java.lang.String);
+    public static java.lang.Object requireNonNull(java.lang.Object, java.util.function.Supplier);
+}
+
 # https://github.com/Kotlin/kotlinx.coroutines/issues/2267
 -checkdiscard @interface kotlin.coroutines.jvm.internal.DebugMetadata
 -assumenosideeffects public class kotlin.coroutines.jvm.internal.BaseContinuationImpl {
@@ -35,6 +41,9 @@
   public java.lang.StackTraceElement getStackTraceElement() return null;
   public java.lang.String[] getSpilledVariableFieldMapping() return null;
 }
+
+# com.chibatching.kotpref.KotprefModel.remove
+-keep class * implements kotlin.reflect.KProperty { *; }
 
 -keepclassmembers class * extends me.everything.providers.core.Entity { *; }
 
@@ -50,5 +59,16 @@
   @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# https://github.com/square/okhttp/blob/master/okhttp/src/main/resources/META-INF/proguard/okhttp3.pro
+-dontwarn org.joda.convert.FromString
+-dontwarn org.joda.convert.ToString
+
+# https://github.com/square/okhttp/issues/6258
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
 -dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE

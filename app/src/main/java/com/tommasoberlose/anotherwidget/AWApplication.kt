@@ -10,7 +10,6 @@ import com.tommasoberlose.anotherwidget.global.Preferences
 import com.tommasoberlose.anotherwidget.utils.checkGrantedPermission
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import net.danlew.android.joda.JodaTimeAndroid
 
 class AWApplication : Application() {
     override fun onCreate() {
@@ -18,7 +17,6 @@ class AWApplication : Application() {
 
         // Firebase crashlitycs
         //FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false)
 
         // Preferences
         Kotpref.init(this)
