@@ -134,12 +134,22 @@ class WeatherFragment : Fragment() {
     }
 
     private fun checkLocationPermission() {
-        if (requireActivity().checkGrantedPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (requireActivity().checkGrantedPermission(Manifest.permission.ACCESS_COARSE_LOCATION) &&
+            (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q ||
+             requireActivity().checkGrantedPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+        ) {
             binding.locationPermissionAlert.isVisible = false
         } else if (Preferences.customLocationAdd == "") {
             binding.locationPermissionAlert.isVisible = true
             binding.locationPermissionAlert.setOnClickListener {
                 requirePermission()
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R &&
+                requireActivity().checkGrantedPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            ) {
+                val text = getString(R.string.action_grant_permission) + " - " +
+                        requireContext().packageManager.backgroundPermissionOptionLabel
+                binding.locationPermissionAlert.text = text
             }
             binding.weatherProviderLocationError.isVisible = false
         } else {
@@ -177,9 +187,7 @@ class WeatherFragment : Fragment() {
                 .addOnSelectItemListener { value ->
                     if (value != Preferences.weatherTempUnit) {
                         Preferences.weatherTempUnit = value
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            WeatherHelper.updateWeather(requireContext())
-                        }
+                        WeatherHelper.updateWeather(requireContext())
                     }
                 }.show()
         }
@@ -208,9 +216,7 @@ class WeatherFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 Constants.RESULT_CODE_CUSTOM_LOCATION -> {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        WeatherHelper.updateWeather(requireContext())
-                    }
+                    WeatherHelper.updateWeather(requireContext())
                 }
                 //RequestCode.WEATHER_PROVIDER_REQUEST_CODE.code -> {
                 //}
@@ -221,16 +227,50 @@ class WeatherFragment : Fragment() {
 
     private fun requirePermission() {
         Dexter.withContext(requireContext())
-            .withPermissions(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ).withListener(object: MultiplePermissionsListener {
+            .run {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+                    requireActivity().checkGrantedPermission(Manifest.permission.ACCESS_COARSE_LOCATION))
+                    withPermissions(
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    )
+                else if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.Q)
+                    withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    )
+                else
+                    withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                    )
+            }.withListener(object: MultiplePermissionsListener {
+                private var shouldShowRationale = false
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                     report?.let {
-                        if (report.areAllPermissionsGranted()) {
+                        if (report.grantedPermissionResponses.isNotEmpty()) {
                             checkLocationPermission()
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                WeatherHelper.updateWeather(requireContext())
-                            }
+                            WeatherHelper.updateWeather(requireContext())
+                        }
+                        else if (!shouldShowRationale && report.isAnyPermissionPermanentlyDenied) {
+                            MaterialBottomSheetDialog(
+                                requireContext(),
+                                getString(R.string.title_permission_location),
+                                getString(R.string.description_permission_location)
+                            ).setNegativeButton(getString(R.string.action_ignore))
+                            .setPositiveButton(getString(R.string.action_grant_permission)) {
+                                startActivity(
+                                    Intent(
+                                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                    ).apply {
+                                        data = android.net.Uri.fromParts(
+                                            "package",
+                                            requireContext().packageName,
+                                            null
+                                        )
+                                    }
+                                )
+                            }.show()
                         }
                     }
                 }
@@ -238,12 +278,19 @@ class WeatherFragment : Fragment() {
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
+                    shouldShowRationale = true
                     // Remember to invoke this method when the custom rationale is closed
                     // or just by default if you don't want to use any custom rationale.
                     token?.continuePermissionRequest()
                 }
             })
             .check()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkWeatherProviderConfig()
+        checkLocationPermission()
     }
 
     private fun maintainScrollPosition(callback: () -> Unit) {
