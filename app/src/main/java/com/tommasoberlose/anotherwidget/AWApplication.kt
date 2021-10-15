@@ -14,7 +14,6 @@ class AWApplication : Application() {
 
         // Firebase crashlitycs
         //FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false)
 
         // Preferences
         Kotpref.init(this)
