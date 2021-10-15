@@ -27,7 +27,9 @@ class WeatherWorker(context: Context, params: WorkerParameters) : CoroutineWorke
     override suspend fun doWork(): Result {
         val context = applicationContext
         if (Preferences.customLocationAdd == "" &&
-            context.checkGrantedPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            context.checkGrantedPermission(Manifest.permission.ACCESS_COARSE_LOCATION) &&
+            (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q ||
+             context.checkGrantedPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION))
         ) {
             if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
                 == ConnectionResult.SUCCESS
