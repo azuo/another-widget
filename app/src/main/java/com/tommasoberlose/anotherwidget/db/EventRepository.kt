@@ -27,7 +27,7 @@ class EventRepository(val context: Context) {
         db.runInTransaction{
             db.dao().run {
                 deleteAll()
-                insertAll(eventList)
+                insert(eventList)
             }
         }
     }
@@ -39,12 +39,6 @@ class EventRepository(val context: Context) {
     fun resetNextEventData() {
         Preferences.bulk {
             remove(Preferences::nextEventId)
-            remove(Preferences::nextEventName)
-            remove(Preferences::nextEventStartDate)
-            remove(Preferences::nextEventAllDay)
-            remove(Preferences::nextEventLocation)
-            remove(Preferences::nextEventEndDate)
-            remove(Preferences::nextEventCalendarId)
         }
     }
 
@@ -75,7 +69,7 @@ class EventRepository(val context: Context) {
             val events = getEvents()
             if (events.isNotEmpty()) {
                 val newNextEvent = events.first()
-                Preferences.nextEventId = newNextEvent.id
+                saveNextEventData(newNextEvent)
                 newNextEvent
             } else {
                 resetNextEventData()
@@ -93,9 +87,9 @@ class EventRepository(val context: Context) {
         if (eventList.isNotEmpty()) {
             val index = eventList.indexOfFirst { it.id == Preferences.nextEventId }
             if (index > -1 && index < eventList.size - 1) {
-                Preferences.nextEventId = eventList[index + 1].id
+                saveNextEventData(eventList[index + 1])
             } else {
-                Preferences.nextEventId = eventList.first().id
+                saveNextEventData(eventList.first())
             }
         } else {
             resetNextEventData()
@@ -111,9 +105,9 @@ class EventRepository(val context: Context) {
         if (eventList.isNotEmpty()) {
             val index = eventList.indexOfFirst { it.id == Preferences.nextEventId }
             if (index > 0) {
-                Preferences.nextEventId = eventList[index - 1].id
+                saveNextEventData(eventList[index - 1])
             } else {
-                Preferences.nextEventId = eventList.last().id
+                saveNextEventData(eventList.last())
             }
         } else {
             resetNextEventData()
@@ -125,7 +119,7 @@ class EventRepository(val context: Context) {
     }
 
     fun getFutureEvents(): List<Event> {
-        return db.dao().findFuture(Calendar.getInstance().timeInMillis).applyFilters().sortEvents()
+        return db.dao().find(Calendar.getInstance().timeInMillis).sortEvents()
     }
 
     private fun getEvents(): List<Event> {
@@ -144,7 +138,7 @@ class EventRepository(val context: Context) {
                 else -> add(Calendar.HOUR, 6)
             }
         }
-        return db.dao().find(now, limit.timeInMillis).applyFilters().sortEvents()
+        return db.dao().find(now, limit.timeInMillis).sortEvents()
     }
 
     fun getEventsCount(): Int = getEvents().size
@@ -156,16 +150,16 @@ class EventRepository(val context: Context) {
     @Dao
     interface EventDao {
         @Query("SELECT * FROM events WHERE id = :id LIMIT 1")
-        fun findById(id: Long) : Event?
+        fun findById(id: Long): Event?
 
         @Query("SELECT * FROM events WHERE end_date > :from")
-        fun findFuture(from: Long) : List<Event>
+        fun find(from: Long): List<Event>
 
-        @Query("SELECT * FROM events WHERE end_date > :from and start_date <= :to")
-        fun find(from: Long, to: Long) : List<Event>
+        @Query("SELECT * FROM events WHERE end_date > :from AND start_date <= :to")
+        fun find(from: Long, to: Long): List<Event>
 
         @Insert
-        fun insertAll(events: List<Event>)
+        fun insert(events: List<Event>)
 
         @Query("DELETE FROM events")
         fun deleteAll()
