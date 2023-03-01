@@ -23,7 +23,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 139
-        versionName "2.3.3 P5"
+        versionName "2.3.3 P6"
 
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
     }

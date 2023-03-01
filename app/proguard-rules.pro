@@ -37,9 +37,9 @@
 # https://github.com/Kotlin/kotlinx.coroutines/issues/2267
 -checkdiscard @interface kotlin.coroutines.jvm.internal.DebugMetadata
 -assumenosideeffects public class kotlin.coroutines.jvm.internal.BaseContinuationImpl {
-  private kotlin.coroutines.jvm.internal.DebugMetadata getDebugMetadataAnnotation() return null;
-  public java.lang.StackTraceElement getStackTraceElement() return null;
-  public java.lang.String[] getSpilledVariableFieldMapping() return null;
+    private kotlin.coroutines.jvm.internal.DebugMetadata getDebugMetadataAnnotation() return null;
+    public java.lang.StackTraceElement getStackTraceElement() return null;
+    public java.lang.String[] getSpilledVariableFieldMapping() return null;
 }
 
 # com.chibatching.kotpref.KotprefModel.remove
@@ -56,7 +56,7 @@
 
 # https://github.com/google/gson/blob/master/examples/android-proguard-example/proguard.cfg
 -keepclassmembers class * {
-  @com.google.gson.annotations.SerializedName <fields>;
+    @com.google.gson.annotations.SerializedName <fields>;
 }
 
 -dontwarn org.joda.convert.FromString
