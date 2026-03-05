@@ -20,8 +20,8 @@ android {
         applicationId "com.tommasoberlose.anotherwidget.azuo"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 139
-        versionName "2.3.3 P7"
+        versionCode 140
+        versionName "2.3.3 P8"
 
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
     }

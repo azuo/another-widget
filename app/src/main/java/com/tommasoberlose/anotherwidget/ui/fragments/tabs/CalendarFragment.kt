@@ -248,16 +248,14 @@ class CalendarFragment : Fragment() {
         }
 
         binding.actionWidgetUpdateFrequency.setOnClickListener {
-            if (Preferences.showEvents && Preferences.showDiffTime) {
-                BottomSheetMenu<Int>(requireContext(), header = getString(R.string.settings_widget_update_frequency_title), message = getString(R.string.settings_widget_update_frequency_subtitle)).setSelectedValue(Preferences.widgetUpdateFrequency)
-                    .addItem(getString(R.string.settings_widget_update_frequency_high), Constants.WidgetUpdateFrequency.HIGH.rawValue)
-                    .addItem(getString(R.string.settings_widget_update_frequency_default), Constants.WidgetUpdateFrequency.DEFAULT.rawValue)
-                    .addItem(getString(R.string.settings_widget_update_frequency_low), Constants.WidgetUpdateFrequency.LOW.rawValue)
-                    .addOnSelectItemListener { value ->
-                        Preferences.widgetUpdateFrequency = value
-                        updateCalendar()
-                    }.show()
-            }
+            BottomSheetMenu<Int>(requireContext(), header = getString(R.string.settings_widget_update_frequency_title), message = getString(R.string.settings_widget_update_frequency_subtitle)).setSelectedValue(Preferences.widgetUpdateFrequency)
+                .addItem(getString(R.string.settings_widget_update_frequency_high), Constants.WidgetUpdateFrequency.HIGH.rawValue)
+                .addItem(getString(R.string.settings_widget_update_frequency_default), Constants.WidgetUpdateFrequency.DEFAULT.rawValue)
+                .addItem(getString(R.string.settings_widget_update_frequency_low), Constants.WidgetUpdateFrequency.LOW.rawValue)
+                .addOnSelectItemListener { value ->
+                    Preferences.widgetUpdateFrequency = value
+                    updateCalendar()
+                }.show()
         }
 
         binding.actionSecondRowInfo.setOnClickListener {

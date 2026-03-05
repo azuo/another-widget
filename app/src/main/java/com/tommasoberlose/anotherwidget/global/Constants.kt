@@ -92,6 +92,9 @@ object Constants {
     enum class WidgetAlign(val rawValue: Int) {
         LEFT(0),
         RIGHT(1),
-        CENTER(2)
+        CENTER(2),
+        TOP_LEFT(3),
+        TOP_RIGHT(4),
+        TOP_CENTER(5)
     }
 }

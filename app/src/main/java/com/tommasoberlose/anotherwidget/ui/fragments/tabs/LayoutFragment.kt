@@ -122,16 +122,20 @@ class LayoutFragment : Fragment() {
         viewModel.widgetAlign.observe(viewLifecycleOwner) {
             maintainScrollPosition {
                 binding.widgetAlignIcon.setImageDrawable(when (it) {
-                    Constants.WidgetAlign.LEFT.rawValue -> ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_left_24)
-                    Constants.WidgetAlign.RIGHT.rawValue -> ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_right_24)
-                    Constants.WidgetAlign.CENTER.rawValue -> ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_center_24)
-                    else -> ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_center_24)
+                    Constants.WidgetAlign.LEFT.rawValue, Constants.WidgetAlign.TOP_LEFT.rawValue ->
+                        ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_left_24)
+                    Constants.WidgetAlign.RIGHT.rawValue, Constants.WidgetAlign.TOP_RIGHT.rawValue ->
+                        ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_right_24)
+                    else ->
+                        ContextCompat.getDrawable(requireContext(), R.drawable.round_align_horizontal_center_24)
                 })
 
                 binding.widgetAlignLabel.text = when (it) {
                     Constants.WidgetAlign.LEFT.rawValue -> getString(R.string.settings_widget_align_left_subtitle)
+                    Constants.WidgetAlign.TOP_LEFT.rawValue -> getString(R.string.settings_widget_align_top_left_subtitle)
                     Constants.WidgetAlign.RIGHT.rawValue -> getString(R.string.settings_widget_align_right_subtitle)
-                    Constants.WidgetAlign.CENTER.rawValue -> getString(R.string.settings_widget_align_center_subtitle)
+                    Constants.WidgetAlign.TOP_RIGHT.rawValue -> getString(R.string.settings_widget_align_top_right_subtitle)
+                    Constants.WidgetAlign.TOP_CENTER.rawValue -> getString(R.string.settings_widget_align_top_center_subtitle)
                     else -> getString(R.string.settings_widget_align_center_subtitle)
                 }
             }
@@ -289,6 +293,18 @@ class LayoutFragment : Fragment() {
                 .addItem(
                     getString(R.string.settings_widget_align_right_subtitle),
                     Constants.WidgetAlign.RIGHT.rawValue
+                )
+                .addItem(
+                    getString(R.string.settings_widget_align_top_center_subtitle),
+                    Constants.WidgetAlign.TOP_CENTER.rawValue
+                )
+                .addItem(
+                    getString(R.string.settings_widget_align_top_left_subtitle),
+                    Constants.WidgetAlign.TOP_LEFT.rawValue
+                )
+                .addItem(
+                    getString(R.string.settings_widget_align_top_right_subtitle),
+                    Constants.WidgetAlign.TOP_RIGHT.rawValue
                 )
                 .addOnSelectItemListener { value ->
                     Preferences.widgetAlign = value

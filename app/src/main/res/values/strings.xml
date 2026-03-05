@@ -35,7 +35,10 @@
     <string name="settings_widget_align_left_subtitle">Left</string>
     <string name="settings_widget_align_right_subtitle">Right</string>
     <string name="settings_widget_align_center_subtitle">Center</string>
-    
+    <string name="settings_widget_align_top_left_subtitle">Top Left</string>
+    <string name="settings_widget_align_top_right_subtitle">Top Right</string>
+    <string name="settings_widget_align_top_center_subtitle">Top Center</string>
+
     <string name="font_100" translatable="false">Thin</string>
     <string name="font_200" translatable="false">Light</string>
     <string name="font_300" translatable="false">Book</string>

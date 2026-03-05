@@ -37,7 +37,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-class StandardWidget(val context: Context) {
+class StandardWidget(val context: Context, private val topAligned: Boolean = false) {
     fun generateWidget(appWidgetId: Int, w: Int, typeface: Typeface? = null): RemoteViews? {
 
         var views = RemoteViews(context.packageName, R.layout.the_widget_sans)
@@ -67,6 +67,10 @@ class StandardWidget(val context: Context) {
             // Padding
             val padding = (Preferences.widgetPadding.convertDpToPixel(context) + Preferences.widgetMargin.convertDpToPixel(context)).toInt()
             views.setViewPadding(R.id.main_layout, padding, padding, padding, padding)
+
+            // Gravity
+            val valign = if (topAligned) Gravity.TOP else Gravity.CENTER_VERTICAL
+            views.setInt(R.id.main_layout, "setGravity", valign or Gravity.CENTER_HORIZONTAL)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

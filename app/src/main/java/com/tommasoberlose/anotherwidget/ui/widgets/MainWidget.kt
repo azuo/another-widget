@@ -69,8 +69,10 @@ class MainWidget : AppWidgetProvider() {
             WidgetHelper.runWithCustomTypeface(context) {
                 val views = when (Preferences.widgetAlign) {
                     Constants.WidgetAlign.LEFT.rawValue -> AlignedWidget(context).generateWidget(appWidgetId, dimensions.first, it)
+                    Constants.WidgetAlign.TOP_LEFT.rawValue -> AlignedWidget(context, topAligned = true).generateWidget(appWidgetId, dimensions.first, it)
                     Constants.WidgetAlign.RIGHT.rawValue -> AlignedWidget(context, rightAligned = true).generateWidget(appWidgetId, dimensions.first, it)
-                    else -> StandardWidget(context).generateWidget(appWidgetId, dimensions.first, it)
+                    Constants.WidgetAlign.TOP_RIGHT.rawValue -> AlignedWidget(context, rightAligned = true, topAligned = true).generateWidget(appWidgetId, dimensions.first, it)
+                    else -> StandardWidget(context, Preferences.widgetAlign == Constants.WidgetAlign.TOP_CENTER.rawValue).generateWidget(appWidgetId, dimensions.first, it)
                 }
                 try {
                     if (views != null) appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -82,16 +84,11 @@ class MainWidget : AppWidgetProvider() {
 
         fun getWidgetView(context: Context, width: Int, typeface: Typeface?): RemoteViews? {
             return when (Preferences.widgetAlign) {
-                Constants.WidgetAlign.LEFT.rawValue -> AlignedWidget(context).generateWidget(
-                    0,
-                    width,
-                    typeface
-                )
-                Constants.WidgetAlign.RIGHT.rawValue -> AlignedWidget(
-                    context,
-                    rightAligned = true
-                ).generateWidget(0, width, typeface)
-                else -> StandardWidget(context).generateWidget(0, width, typeface)
+                Constants.WidgetAlign.LEFT.rawValue -> AlignedWidget(context).generateWidget(0, width, typeface)
+                Constants.WidgetAlign.TOP_LEFT.rawValue -> AlignedWidget(context, topAligned = true).generateWidget(0, width, typeface)
+                Constants.WidgetAlign.RIGHT.rawValue -> AlignedWidget(context, rightAligned = true).generateWidget(0, width, typeface)
+                Constants.WidgetAlign.TOP_RIGHT.rawValue -> AlignedWidget(context, rightAligned = true, topAligned = true).generateWidget(0, width, typeface)
+                else -> StandardWidget(context, Preferences.widgetAlign == Constants.WidgetAlign.TOP_CENTER.rawValue).generateWidget(0, width, typeface)
             }
         }
     }

@@ -35,7 +35,10 @@
     <string name="settings_widget_align_left_subtitle">左对齐</string>
     <string name="settings_widget_align_right_subtitle">右对齐</string>
     <string name="settings_widget_align_center_subtitle">居中</string>
-    
+    <string name="settings_widget_align_top_left_subtitle">顶部左对齐</string>
+    <string name="settings_widget_align_top_right_subtitle">顶部右对齐</string>
+    <string name="settings_widget_align_top_center_subtitle">顶部居中</string>
+
     <string name="font_100" translatable="false">Thin</string>
     <string name="font_200" translatable="false">Light</string>
     <string name="font_300" translatable="false">Book</string>
